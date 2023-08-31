@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huc.system.mapper.BizHouseMapper">
+
+    <sql id="querySql">
+        select <include refid="allField"/>
+        from biz_house A
+        <include refid="search"/>
+    </sql>
+
+    <select id="queryList" resultType="com.huc.system.domain.vo.BizHouseVo">
+        <include refid="querySql"/>
+        <if test="entity.name != null and entity.name != ''">
+            and A.name like concat('%', #{entity.name}, '%')
+        </if>
+        <if test="entity.status != null">
+            and A.status = #{entity.status}
+        </if>
+        <if test="entity.cityName != null and entity.cityName != ''">
+            and A.city_name like concat('%', #{entity.cityName}, '%')
+        </if>
+        <if test="entity.cityCode != null and entity.cityCode != ''">
+            and A.city_code = #{entity.cityCode}
+        </if>
+        <if test="entity.type != null and entity.type != ''">
+            and A.type like concat('%', #{entity.type}, '%')
+        </if>
+        <if test="entity.address != null and entity.address != ''">
+            and A.address like concat('%', #{entity.address}, '%')
+        </if>
+        <if test="entity.area1 != null and entity.area2 != null and entity.area1 != 0 and entity.area2 != 0 ">
+            <![CDATA[and A.area >= #{entity.area1} and A.area <= #{entity.area2}]]>
+        </if>
+        <if test="entity.direction != null and entity.direction != ''">
+            and A.direction like concat('%', #{entity.direction}, '%')
+        </if>
+        <if test="entity.price1 != null and entity.price1 != 0 and entity.price2 != null and entity.price2 != 0">
+            <![CDATA[ and A.price >= #{entity.price1} and A.price <= #{entity.price1}]]>
+        </if>
+        <if test="entity.year != null and entity.year != 0">
+            and A.year = #{entity.year}
+        </if>
+        <if test="entity.yearTemp != null">
+            <![CDATA[and A.year >= #{entity.yearTemp[0]} and A.year <= #{entity.yearTemp[1]}]]>
+        </if>
+        <if test="entity.decoration != null and entity.decoration != ''">
+            and A.decoration like concat('%', #{entity.decoration}, '%')
+        </if>
+        <if test="entity.homeApp != null and entity.homeApp != ''">
+            and A.home_app like concat('%', #{entity.homeApp}, '%')
+        </if>
+        <if test="entity.furniture != null and entity.furniture != ''">
+            and A.furniture like concat('%', #{entity.furniture}, '%')
+        </if>
+        <if test="entity.landlord != null and entity.landlord != ''">
+            and A.landlord like concat('%', #{entity.landlord}, '%')
+        </if>
+        <if test="entity.mobile != null and entity.mobile != ''">
+            and A.mobile like concat('%', #{entity.mobile}, '%')
+        </if>
+        <if test="entity.remark != null and entity.remark != ''">
+            and A.remark like concat('%', #{entity.remark}, '%')
+        </if>
+        order by A.create_time desc
+    </select>
+
+    <select id="queryById" resultType="com.huc.system.domain.vo.BizHouseVo">
+        <include refid="querySql"/>
+        and A.id = #{id}
+    </select>
+
+    <sql id="allField">
+        A.id,
+        A.name,
+        A.status,
+        A.city_name,
+        A.city_code,
+        A.type,
+        A.address,
+        A.area,
+        A.direction,
+        A.price,
+        A.year,
+        A.decoration,
+        A.home_app,
+        A.furniture,
+        A.landlord,
+        A.mobile,
+        A.remark,
+        A.create_by,
+        A.create_time,
+        A.update_by,
+        A.update_time
+    </sql>
+
+    <sql id="search">
+        where 1 = 1
+    </sql>
+</mapper>

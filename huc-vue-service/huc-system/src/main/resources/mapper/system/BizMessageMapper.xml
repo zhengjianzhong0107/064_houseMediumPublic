@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huc.system.mapper.BizMessageMapper">
+
+    <sql id="querySql">
+        select <include refid="allField"/> ,B.phonenumber
+        from biz_message A,sys_user B
+        <include refid="search"/>
+    </sql>
+
+    <select id="queryList" resultType="com.huc.system.domain.vo.BizMessageVo">
+        <include refid="querySql"/>
+        <if test="entity.uid != null and entity.uid != 0">
+            and A.uid = #{entity.uid}
+        </if>
+        <if test="entity.toUid != null and entity.toUid != 0">
+            and A.to_uid = #{entity.toUid}
+        </if>
+        <if test="entity.content != null and entity.content != ''">
+            and A.content like concat('%', #{entity.content}, '%')
+        </if>
+        order by A.create_time desc
+    </select>
+
+    <select id="queryById" resultType="com.huc.system.domain.vo.BizMessageVo">
+        <include refid="querySql"/>
+        and A.id = #{id}
+    </select>
+
+    <sql id="allField">
+        A.id,
+        A.uid,
+        A.to_uid,
+        A.content,
+        A.create_by,
+        A.create_time,
+        A.update_by,
+        A.update_time
+    </sql>
+
+    <sql id="search">
+        where A.uid = B.user_id
+    </sql>
+</mapper>

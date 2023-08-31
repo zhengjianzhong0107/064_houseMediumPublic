@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huc.system.mapper.BizCommentMapper">
+
+    <sql id="querySql">
+        select <include refid="allField"/>
+        from biz_comment A
+        <include refid="search"/>
+    </sql>
+
+    <select id="queryList" resultType="com.huc.system.domain.vo.BizCommentVo">
+        <include refid="querySql"/>
+        <if test="entity.uid != null and entity.uid != 0">
+            and A.uid = #{entity.uid}
+        </if>
+        <if test="entity.houseId != null and entity.houseId != 0">
+            and A.house_id = #{entity.houseId}
+        </if>
+        <if test="entity.content != null and entity.content != ''">
+            and A.content like concat('%', #{entity.content}, '%')
+        </if>
+        order by A.create_time desc
+    </select>
+
+    <select id="queryById" resultType="com.huc.system.domain.vo.BizCommentVo">
+        <include refid="querySql"/>
+        and A.id = #{id}
+    </select>
+
+    <sql id="allField">
+        A.id,
+        A.uid,
+        A.house_id,
+        A.content,
+        A.create_by,
+        A.create_time,
+        A.update_by,
+        A.update_time
+    </sql>
+
+    <sql id="search">
+        where 1 = 1
+    </sql>
+</mapper>
